@@ -1,62 +1,106 @@
 // ==UserScript==
-// @name            Weibo Big Picture
-// @namespace       https://github.com/adelabs
-// @description     New buttons for opening full sized pictures in new background tabs. Add "href" attributes to "Full size"/"查看大图"/"查看大圖" anchors so that you can mid-click or right-click them with more options.
-// @version         3.2.1
-// @license         GPL version 3
-// @downloadURL     https://github.com/adelabs/user.js/raw/master/weibo_big_picture.user.js
-// @include         *://weibo.com/*
-// @require         http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js
-// @grant           GM_openInTab
-// @run-at          document-end
+// @name        Weibo Big Picture
+// @namespace   https://github.com/adelabs
+// @description New buttons for opening full sized pictures in new background tabs. Add "href" attributes to "Full size"/"查看大图"/"查看大圖" anchors so that you can mid-click or right-click them with more options.
+// @version     3.3
+// @license     GPL version 3
+// @downloadURL https://github.com/adelabs/user.js/raw/master/weibo_big_picture.user.js
+// @include     *://weibo.com/*
+// @require     http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js
+// @grant       GM_openInTab
+// @run-at      document-end
 // ==/UserScript==
 
+(function initialize() {
+    // Wait until feed list is found.
+    var a = $('.WB_feed');
+    if ($('.WB_feed').length == 0) {
+        return setTimeout(initialize, 100);
+    }
+    // First launch
+    run();
+    // Observer the post list and launch each time it changes.
+    $('.WB_feed').each(function(i, o){
+        var observer = new MutationObserver(function(mutations) {
+            run();
+        });
+        observer.observe(o, {childList: true});
+    });
+})();
+
+function run() {
+    // Create open-in-background buttons for thumbnails.
+    $('ul.WB_media_list:not(.adelabs)').each(function(i, list){
+        $(list).addClass('adelabs');
+        // Get one href for each thumbnail.
+        var hrefs = [];
+        $(list).find('img.bigcursor[node-type="feed_list_media_bgimg"], ' +  // single pic
+                     'img.bigcursor[action-type="fl_pics"]'  // multiple pic
+                    ).each(function(){
+            hrefs.push(get_href_from_bigcursor($(this)));
+        });
+        // One button for each thumbnail.
+        for (var i=0; i<hrefs.length; ++i) {
+            var button = create_button((i+1).toString(), [hrefs[i]]);
+            $(list).before(button).before(' ');
+        }
+        // One extra button for all.
+        if (hrefs.length > 1) {
+            var button = create_button('all', hrefs);
+            $(list).before(button);
+        }
+    });
+    
+    // Observe all "Full size" anchors and create buttons for them.
+    $('div.WB_media_expand:not(.adelabs), ' +  // post
+      'div.expand:not(.adelabs)'  // repost
+     ).each(function(i, expand){
+        $(expand).addClass('adelabs');
+        // Each time a mid sized pic is expanded,
+        var observer_for_expand = new MutationObserver(function(mutations) {
+            // for its "Full size" anchor,
+            $(expand).find('a.show_big').each(function(i, show_big){
+                // set its href and add a new button
+                function update(show_big) {
+                    href = get_href_from_show_big(show_big);
+                    if (show_big.attr('href') == href) { return; }
+                    show_big.attr('href', href);
+                    show_big.parent().find('a.adelabs').remove();
+                    var button = create_button('Open', [href]);
+                    show_big.after(button);
+                    button.hide().show(50);
+                }
+                update($(show_big));
+                // Observe it and update it again when it changes.
+                var observer_for_show_big = new MutationObserver(function(mutations) {
+                    update($(show_big));
+                });
+                observer_for_show_big.observe(show_big, {attributes:true, 
+                                                         attributeFilter: ['action-data']});
+            });
+        });
+        observer_for_expand.observe(expand, {childList: true});
+    });
+}
+
+// Create a button which opens `hrefs` in backgroud tabs when clicked.
 function create_button(text, hrefs) {
-    var a = $('<a class="W_btn_b"><span>' + text + '</span></a>');
+    var a = $('<a class="W_btn_c adelabs"><span>' + text + '</span></a>');
     return a.click(function(e){
         for (var i=0; i<hrefs.length; ++i) {
             GM_openInTab(hrefs[i], true);
         }
     });
 }
-
-setInterval(function(){
-    // For each thumbnail (`img.bigcursor`) create an anchor (`<a/>`), which opens a background tab for the full sized picture when clicked.
-    $('ul.WB_media_list').each(function(){
-        if ($(this).attr('adelabs') == '1') { return; }
-        $(this).attr('adelabs', '1');
-        var hrefs = [];
-        $(this).find('img.bigcursor').each(function(i){
-            if ($(this).attr('action-type') != 'fl_pics' &&
-                $(this).attr('node-type') != 'feed_list_media_bgimg') {
-                return;
-            }
-            var src = $(this).attr('src');
-            var basename = src.replace(/.*\//, '');
-            var href = '//ww3.sinaimg.cn/large/' + basename;
-            hrefs.push(href);
-        });
-        for (var i=0; i<hrefs.length; ++i) {
-            var a = create_button((i+1).toString(), [hrefs[i]]);
-            $(this).before(a).before(' ');
-        }
-        if (hrefs.length > 1) {
-            var a = create_button('all', hrefs);
-            $(this).before(a);
-        }
-    });
-
-    // Where there is a "Full size" anchor (`a.show_big`), set its "href" and create an extra anchor (`<a/>`) aside, which opens a backgroud tab for the full size picture when clicked.
-    $('a.show_big').each(function(i){
-        var action_data = $(this).attr('action-data');
-        var pid = action_data.replace(/.*\bpid=(\w+).*/, '$1');
-        var href = '//ww3.sinaimg.cn/large/' + pid;
-        if ($(this).attr('href') != href) {
-            $(this).attr('href', href);
-            var a = $(this).next();
-            if (a.attr('class') == 'W_btn_b') { a.remove(); }
-            a = create_button('open', [href]);
-            $(this).after(a);
-        }
-    });
-}, 500);
+function get_href_from_show_big(show_big) {
+    var action_data = $(show_big).attr('action-data');
+    var pid = action_data.replace(/.*\bpid=(\w+).*/, '$1');
+    var href = '//ww3.sinaimg.cn/large/' + pid;
+    return href;
+}
+function get_href_from_bigcursor(bigcursor) {
+    var src = bigcursor.attr('src');
+    var basename = src.replace(/.*\//, '');
+    var href = '//ww3.sinaimg.cn/large/' + basename;
+    return href;
+}
