@@ -2,7 +2,7 @@
 // @name        Weibo Big Picture
 // @namespace   https://github.com/adelabs
 // @description New buttons for opening full sized pictures in new background tabs. Add "href" attributes to "Full size"/"查看大图"/"查看大圖" anchors so that you can mid-click or right-click them with more options.
-// @version     3.3.1
+// @version     3.4
 // @license     GPL version 3
 // @downloadURL https://github.com/adelabs/user.js/raw/master/weibo_big_picture.user.js
 // @include     *://weibo.com/*
@@ -16,23 +16,31 @@
  */
 
 (function initialize() {
+    console.log('initialize');
     // Wait until feed list is found.
-    var a = $('.WB_feed');
     if ($('.WB_feed').length == 0) {
-        return setTimeout(initialize, 100);
+        return setTimeout(initialize, 500);
     }
-    // First launch
+    // Launch!
     run();
-    // Observer the post list and launch each time it changes.
+    // Observe post list loading
     $('.WB_feed').each(function(i, o){
         var observer = new MutationObserver(function(mutations) {
             run();
         });
         observer.observe(o, {childList: true});
     });
+    // Observe tab changing
+    $('#plc_main').each(function(i, o){
+        var observer = new MutationObserver(function(mutations) {
+            initialize();
+        });
+        observer.observe(o, {childList: true});
+    });
 })();
 
 function run() {
+    console.log('run');
     // Create open-in-background buttons for thumbnails.
     $('ul.WB_media_list:not(.adelabs)').each(function(i, list){
         $(list).addClass('adelabs');
