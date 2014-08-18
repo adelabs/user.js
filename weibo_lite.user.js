@@ -2,7 +2,7 @@
 // @name            Weibo Lite
 // @namespace       https://github.com/adelabs
 // @description     Clear the ads and add a toggle button to hide/show bottom bar and side bars.
-// @version         1.2
+// @version         1.3
 // @license         GPL version 3
 // @downloadURL     https://github.com/adelabs/user.js/raw/master/weibo_lite.user.js
 // @include         *://weibo.com/*
@@ -36,6 +36,8 @@ function hide_ads() {
     console.log('hide_ads');
     var ads = $([
         // Header ads
+        'div.pl_content_biztips',
+        'div.tips_wrapper',
         'div.tips_player',
         'div.title_area',
         // Left side ads
