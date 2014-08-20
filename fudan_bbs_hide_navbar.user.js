@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name            Fudan BBS NoNavBar
+// @name            Fudan BBS Hide NavBar
 // @namespace       https://github.com/adelabs
 // @description     Hide/show navbar for Fudan BBS
 // @version         2.0.1
