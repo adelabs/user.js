@@ -2,8 +2,9 @@
 // @name            Fudan BBS NoNavBar
 // @namespace       https://github.com/adelabs
 // @description     Hide/show navbar for Fudan BBS
-// @version         2.0
+// @version         2.0.1
 // @license         GPL version 3
+// @downloadURL     https://github.com/adelabs/user.js/raw/master/fudan_bbs_hide_navbar.user.js
 // @include         *://bbs.fudan.edu.cn/*
 // @include         *://bbs.fudan.sh.cn/*
 // @require         http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js
