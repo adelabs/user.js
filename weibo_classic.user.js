@@ -2,7 +2,7 @@
 // @name        Weibo Classic
 // @namespace       https://github.com/adelabs
 // @description     A.T.T
-// @version         0.9
+// @version         1.0
 // @license         GPL version 3
 // @downloadURL     https://github.com/adelabs/user.js/raw/master/weibo_classic.user.js
 // @include         *://weibo.com/*
@@ -29,7 +29,8 @@ function getCookie(cname) {
     return "";
 }
 
-document.cookie="wvr6=0; expires=31 Dec 2012 12:00:00 UTC; domain=.weibo.com; path=/"
-document.cookie="wvr=0; expires=31 Dec 2012 12:00:00 UTC; domain=.weibo.com; path=/"
-document.cookie="wvr6=0; expires=31 Dec 2015 12:00:00 UTC; domain=.weibo.com; path=/"
-document.cookie="wvr=4; expires=31 Dec 2015 12:00:00 UTC; domain=.weibo.com; path=/"
+var date = new Date();
+date.setTime(date.getTime() + (-1*24*60*60*1000));
+document.cookie="wvr6=0; expires=" + date.toUTCString() + "; domain=.weibo.com; path=/";
+date.setTime(date.getTime() + (366*24*60*60*1000));
+document.cookie="wvr6=0; expires=" + date.toUTCString() + "; domain=.weibo.com; path=/";
