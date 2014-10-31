@@ -2,7 +2,7 @@
 // @name        Weibo Classic (恢复新浪微博V5)
 // @namespace       https://github.com/adelabs
 // @description     A.T.T
-// @version         2.0
+// @version         2.0.1
 // @license         GPL version 3
 // @include         *://weibo.com/*
 // @include         *://.weibo.com/*
