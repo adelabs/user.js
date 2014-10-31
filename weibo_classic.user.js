@@ -1,10 +1,9 @@
 // ==UserScript==
-// @name        Weibo Classic
+// @name        Weibo Classic (恢复微博V5)
 // @namespace       https://github.com/adelabs
 // @description     A.T.T
-// @version         1.0
+// @version         2.0
 // @license         GPL version 3
-// @downloadURL     https://github.com/adelabs/user.js/raw/master/weibo_classic.user.js
 // @include         *://weibo.com/*
 // @include         *://.weibo.com/*
 // @grant           none
@@ -16,7 +15,7 @@ function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     var expires = "expires="+d.toUTCString();
-    document.cookie = cname + "=" + cvalue + "; " + expires;
+    document.cookie = cname + "=" + cvalue + "; " + expires + "; domain=.weibo.com; path=/";
 }
 function getCookie(cname) {
     var name = cname + "=";
@@ -29,8 +28,13 @@ function getCookie(cname) {
     return "";
 }
 
-var date = new Date();
-date.setTime(date.getTime() + (-1*24*60*60*1000));
-document.cookie="wvr6=0; expires=" + date.toUTCString() + "; domain=.weibo.com; path=/";
-date.setTime(date.getTime() + (366*24*60*60*1000));
-document.cookie="wvr6=0; expires=" + date.toUTCString() + "; domain=.weibo.com; path=/";
+setCookie('wvr6', '0', -1);
+setCookie('wvr6', '0', 999);
+console.log(getCookie('wvr6'));
+
+console.log(window.location.toString());
+if (window.location.search.indexOf('wvr=5') != -1) {
+  var new_href = (window.location.protocal || 'http:') + '//' + window.location.host + window.location.pathname + '?upfrom=v5';
+  console.log(new_href);
+  location.href = new_href;
+}
