@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        Weibo Classic (恢复微博V5)
+// @name        Weibo Classic (恢复新浪微博V5)
 // @namespace       https://github.com/adelabs
 // @description     A.T.T
 // @version         2.0
