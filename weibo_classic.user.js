@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name            Weibo Classic
 // @namespace       https://github.com/adelabs
-// @description     恢复微博V5
-// @version         2.1
+// @description     Back to Weibo V5 (恢复微博V5)
+// @version         2.2
 // @license         GPL version 3
-// @include         *://weibo.com/*
+// @include         *://weibo.com/*/home*
 // @include         *://.weibo.com/*
 // @grant           none
 // @run-at          document-start
@@ -30,11 +30,10 @@ function getCookie(cname) {
 
 setCookie('wvr6', '0', -1);
 setCookie('wvr6', '0', 999);
-console.log(getCookie('wvr6'));
+console.log('wvr6=' + getCookie('wvr6'));
 
 console.log(window.location.toString());
-if (window.location.pathname.match(/home$/) && 
-    window.location.search.match('wvr=5')) {
+if (window.location.search.match('wvr=5')) {
   var new_href = (window.location.protocal || 'http:') + '//' + window.location.host + window.location.pathname + '?upfrom=v5';
   console.log(new_href);
   location.href = new_href;
