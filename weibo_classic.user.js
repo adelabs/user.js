@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name            Weibo Classic
 // @namespace       https://github.com/adelabs
-// @description     Back to Weibo V5 (恢复微博V5)
-// @version         2.4
+// @description     Back to Weibo V5 (恢复新浪微博V5)
+// @version         2.4.1
 // @license         GPL version 3
 // @include         *://weibo.com/*/home*
 // @include         *://.weibo.com/*
