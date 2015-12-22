@@ -2,7 +2,7 @@
 // @name            Weibo Big Picture (新浪微博查看大图)
 // @namespace       https://github.com/adelabs
 // @description     New buttons for opening full sized pictures in new background tabs. Add "href" attributes to "Full size"/"查看大图"/"查看大圖" anchors so that you can mid-click or right-click them with more options.
-// @version         4.0
+// @version         4.1
 // @license         GPL version 3
 // @downloadURL     https://github.com/adelabs/user.js/raw/master/weibo_big_picture.user.js
 // @include         *://weibo.com/*
@@ -43,7 +43,6 @@ function run() {
     console.log('run');
     // Create open-in-background buttons for thumbnails.
     $('ul.WB_media_a:not(.adelabs)').each(function(i, list){
-        console.log($(list));
         $(list).addClass('adelabs');
         // Get one href for each thumbnail.
         var hrefs = [];
@@ -65,14 +64,12 @@ function run() {
     });
     
     // Observe all "Full size" anchors and create buttons for them.
-    $('div.WB_media_expand:not(.adelabs), ' +  // post
-      'div.expand:not(.adelabs)'  // repost
-     ).each(function(i, expand){
+    $('div.WB_expand_media_box:not(.adelabs)').each(function(i, expand){
         $(expand).addClass('adelabs');
         // Each time a mid sized pic is expanded,
         var observer_for_expand = new MutationObserver(function(mutations) {
             // for its "Full size" anchor,
-            $(expand).find('a.show_big').each(function(i, show_big){
+            $(expand).find('a[node-type="tobig"]').each(function(i, show_big){
                 // set its href and add a new button
                 function update(show_big) {
                     href = get_href_from_show_big(show_big);
