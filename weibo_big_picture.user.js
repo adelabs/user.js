@@ -2,7 +2,7 @@
 // @name            Weibo Big Picture (新浪微博查看大图)
 // @namespace       https://github.com/adelabs
 // @description     New buttons for opening full sized pictures in new background tabs. Add "href" attributes to "Full size"/"查看大图"/"查看大圖" anchors so that you can mid-click or right-click them with more options.
-// @version         3.4.3
+// @version         4.0
 // @license         GPL version 3
 // @downloadURL     https://github.com/adelabs/user.js/raw/master/weibo_big_picture.user.js
 // @include         *://weibo.com/*
@@ -10,6 +10,10 @@
 // @grant           GM_openInTab
 // @run-at          document-end
 // ==/UserScript==
+
+/*
+ *  https://github.com/adelabs/user.js/raw/master/weibo_big_picture.user.js
+ */
 
 (function initialize() {
     console.log('initialize');
@@ -38,13 +42,14 @@
 function run() {
     console.log('run');
     // Create open-in-background buttons for thumbnails.
-    $('ul.WB_media_list:not(.adelabs)').each(function(i, list){
+    $('ul.WB_media_a:not(.adelabs)').each(function(i, list){
+        console.log($(list));
         $(list).addClass('adelabs');
         // Get one href for each thumbnail.
         var hrefs = [];
-        $(list).find('img.bigcursor[node-type="feed_list_media_bgimg"], ' +  // single pic
-                     'img.bigcursor[action-type="fl_pics"]'  // multiple pic
-                    ).each(function(){
+        $(list).find('img[node-type="fl_media_bgimg"], ' +  // single pic
+                     'img[action-type="fl_pics"]'           // multiple pic
+                     ).each(function(){
             hrefs.push(get_href_from_bigcursor($(this)));
         });
         // One button for each thumbnail.
@@ -93,7 +98,7 @@ function run() {
 
 // Create a button which opens `hrefs` in backgroud tabs when clicked.
 function create_button(text, hrefs) {
-    var a = $('<a class="W_btn_c adelabs"><span>' + text + '</span></a>');
+    var a = $('<a class="S_txt1 adelabs"><em class="W_new_count">' + text + '</em></a>');
     return a.click(function(e){
         for (var i=0; i<hrefs.length; ++i) {
             GM_openInTab(hrefs[i], true);
