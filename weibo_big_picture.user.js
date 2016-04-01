@@ -2,7 +2,7 @@
 // @name            Weibo Big Picture (新浪微博查看大图)
 // @namespace       https://github.com/adelabs
 // @description     New buttons for opening full sized pictures in new background tabs. Add "href" attributes to "Full size"/"查看大图"/"查看大圖" anchors so that you can mid-click or right-click them with more options.
-// @version         4.3
+// @version         4.4
 // @license         GPL version 3
 // @downloadURL     https://github.com/adelabs/user.js/raw/master/weibo_big_picture.user.js
 // @include         *://weibo.com/*
@@ -77,7 +77,7 @@ function run() {
         // Each time a mid sized pic is expanded,
         var observer_for_expand = new MutationObserver(function(mutations) {
             // for its "Full size" anchor,
-            $(expand).find('a[node-type="tobig"]').each(function(i, show_big){
+            $(expand).find('a[action-type="widget_photoview"]').each(function(i, show_big){
                 // set its href and add a new button
                 function update(show_big) {
                     href = get_href_from_show_big(show_big);
