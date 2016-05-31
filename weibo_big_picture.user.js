@@ -21,30 +21,32 @@
  *  https://greasyfork.org/en/scripts/2121
  */
 
-(function initialize() {
-    console.log('initialize');
-    // Wait until feed list is found.
-    if ($('.WB_feed').length == 0) {
-        return setTimeout(initialize, 500);
-    }
-    // Launch!
-    run();
+function initialize() {
+    console.log('initialize', location.href);
+    if ($('.WB_feed:not(.adelabs)').length == 0) { return false; }
     // Observe post list loading
     $('.WB_feed').each(function(i, o){
+        console.log('observe', o);
+        $(o).addClass('adelabs');
         var observer = new MutationObserver(function(mutations) {
+            console.log('mutation', o);
             run();
         });
         observer.observe(o, {childList: true});
     });
-    // Observe tab changing
-    $('#plc_main:not(.adelabs)').each(function(i, o){
-        $(o).addClass('adelabs');
-        var observer = new MutationObserver(function(mutations) {
-            initialize();
-        });
-        observer.observe(o, {childList: true});
-    });
-})();
+    // Launch!
+    run();
+    return true;
+}
+
+var href = '';
+setInterval(function() {
+    if (location.href != href) {
+        if (initialize()) {
+            href = location.href;
+        }
+    }
+}, 1000);
 
 function run() {
     console.log('run');
