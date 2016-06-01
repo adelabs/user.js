@@ -2,7 +2,7 @@
 // @name            Weibo Big Picture (新浪微博查看大图)
 // @namespace       https://github.com/adelabs
 // @description     New buttons for opening full sized pictures in new background tabs. Add "href" attributes to "Full size"/"查看大图"/"查看大圖" anchors so that you can mid-click or right-click them with more options.
-// @version         4.5
+// @version         4.6
 // @license         GPL version 3
 // @downloadURL     https://github.com/adelabs/user.js/raw/master/weibo_big_picture.user.js
 // @include         *://weibo.com/*
