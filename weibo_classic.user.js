@@ -35,7 +35,7 @@ console.log('wvr6=' + getCookie('wvr6'));
 console.log(window.location.toString());
 if (window.location.pathname.match(/\/home$/) &&
     window.location.search.match('wvr=5')) {
-  var new_href = (window.location.protocal || 'http:') + '//' + window.location.host + window.location.pathname + '?upfrom=v5';
+  var new_href = (window.location.protocol || 'http:') + '//' + window.location.host + window.location.pathname + '?upfrom=v5';
   console.log(new_href);
   location.href = new_href;
 }
