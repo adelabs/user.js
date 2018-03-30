@@ -2,7 +2,7 @@
 // @name            non-177
 // @namespace       https://github.com/adelabs
 // @description     hide all messages containing "177" in wx.qq.com 
-// @version         0.2
+// @version         0.3
 // @downloadURL     https://github.com/adelabs/user.js/raw/master/non_177.user.js
 // @include         https://wx.qq.com/
 // @require         http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js
@@ -40,10 +40,23 @@ function getMessageBox() {
   return messageBox;
 }
 
+//  .message
+//    div
+//      img.avatar title=""
+//      .content
+//        h4.nickname
+//        .bubble
+//          .bubble_cont
+//            .plain
+//              pre
+//        .emotion
+
 function filter(key) {
   $(".message:visible:contains("+key+")").each(function(i,o){
     console.log('filter', key, o);
-    $(o).attr('hidden', 'true');
+    $(o).find('h4').remove();
+    $(o).find('.bubble').remove();
+    $(o).find('.emotion').remove();
   });
 }
 
